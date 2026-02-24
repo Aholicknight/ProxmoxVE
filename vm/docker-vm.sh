@@ -3,6 +3,7 @@
 # Copyright (c) 2021-2026 community-scripts ORG
 # Author: thost96 (thost96) | michelroegl-brunner | MickLesk
 # License: MIT | https://github.com/community-scripts/ProxmoxVED/raw/main/LICENSE
+# Source: https://www.docker.com/
 
 # ==============================================================================
 # Docker VM - Creates a Docker-ready Virtual Machine

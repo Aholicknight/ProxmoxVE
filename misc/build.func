@@ -5500,6 +5500,15 @@ create_lxc_container() {
 description() {
   IP=$(pct exec "$CTID" ip a s dev eth0 | awk '/inet / {print $2}' | cut -d/ -f1)
 
+  # Build application title with optional hotlink to source website
+  local source_url
+  source_url=$(get_source_url)
+  if [[ -n "$source_url" ]]; then
+    APP_TITLE="<a href='${source_url}' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: inherit;'>${APP} LXC</a>"
+  else
+    APP_TITLE="${APP} LXC"
+  fi
+
   # Generate LXC Description
   DESCRIPTION=$(
     cat <<EOF
@@ -5508,7 +5517,7 @@ description() {
     <img src='https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/images/logo-81x112.png' alt='Logo' style='width:81px;height:112px;'/>
   </a>
 
-  <h2 style='font-size: 24px; margin: 20px 0;'>${APP} LXC</h2>
+  <h2 style='font-size: 24px; margin: 20px 0;'>${APP_TITLE}</h2>
 
   <p style='margin: 16px 0;'>
     <a href='https://ko-fi.com/community_scripts' target='_blank' rel='noopener noreferrer'>
