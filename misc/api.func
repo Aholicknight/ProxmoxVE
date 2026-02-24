@@ -110,6 +110,34 @@ detect_repo_source() {
 # Run detection immediately when api.func is sourced
 detect_repo_source
 
+# ------------------------------------------------------------------------------
+# get_source_url()
+#
+# - Extracts the application source/website URL from the calling script
+# - Looks for '# Source: <URL>' comment in the script header
+# - Uses two detection methods (same as detect_repo_source):
+#   1. Direct file read from $0 (when script is run as a file)
+#   2. /proc/$$/cmdline inspection (when invoked via bash -c "$(curl ...)")
+# - Returns the URL string or empty if not found
+# ------------------------------------------------------------------------------
+get_source_url() {
+  local content=""
+
+  # Method 1: Read from the original script file
+  if [[ -f "$0" ]] && [[ "$0" != *bash* ]]; then
+    content=$(head -10 "$0" 2>/dev/null) || true
+  fi
+
+  # Method 2: Fall back to /proc/$$/cmdline
+  if [[ -z "$content" ]] && [[ -r /proc/$$/cmdline ]]; then
+    content=$(tr '\0' ' ' </proc/$$/cmdline 2>/dev/null) || true
+  fi
+
+  if [[ -n "$content" ]]; then
+    echo "$content" | sed -n 's/^# Source: *//p' | head -1
+  fi
+}
+
 # ==============================================================================
 # SECTION 1: ERROR CODE DESCRIPTIONS
 # ==============================================================================
