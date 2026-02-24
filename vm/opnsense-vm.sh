@@ -3,6 +3,7 @@
 # Copyright (c) 2021-2026 community-scripts ORG
 # Author: michelroegl-brunner
 # License: MIT | https://github.com/community-scripts/ProxmoxVE/raw/main/LICENSE
+# Source: https://opnsense.org/
 
 source /dev/stdin <<<$(curl -fsSL https://raw.githubusercontent.com/community-scripts/ProxmoxVE/main/misc/api.func)
 
@@ -694,6 +695,12 @@ qm set $VMID \
   -serial0 socket \
   -tags community-script >/dev/null
 qm resize $VMID scsi0 20G >/dev/null
+SOURCE_URL=$(get_source_url)
+if [[ -n "$SOURCE_URL" ]]; then
+  APP_TITLE="<a href='${SOURCE_URL}' target='_blank' rel='noopener noreferrer' style='text-decoration: none; color: inherit;'>OPNsense VM</a>"
+else
+  APP_TITLE="OPNsense VM"
+fi
 DESCRIPTION=$(
   cat <<EOF
 <div align='center'>
@@ -701,7 +708,7 @@ DESCRIPTION=$(
     <img src='https://raw.githubusercontent.com/michelroegl-brunner/ProxmoxVE/refs/heads/develop/misc/images/logo-81x112.png' alt='Logo' style='width:81px;height:112px;'/>
   </a>
 
-  <h2 style='font-size: 24px; margin: 20px 0;'>OPNsense VM</h2>
+  <h2 style='font-size: 24px; margin: 20px 0;'>${APP_TITLE}</h2>
 
   <p style='margin: 16px 0;'>
     <a href='https://ko-fi.com/community_scripts' target='_blank' rel='noopener noreferrer'>
